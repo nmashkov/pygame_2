@@ -383,6 +383,7 @@ def event_handler():
             )
         # START TRAIN STATE
         if events.type == settings.START_TRAIN:
+            variables.ticks = pygame.time.get_ticks()
             variables.is_warmuped = False
             variables.pl_pos_log = True
             pygame.time.set_timer(settings.PLAYER_POS, settings.PLPOSLOG_TIMER)
@@ -452,6 +453,7 @@ def event_handler():
         # START EXAM SESSION
         if events.type == settings.START_EXAM:
             # RESET VARIABLES
+            variables.ticks = pygame.time.get_ticks()
             variables.is_warmuped = False
             variables.lp_active_time = td()
             variables.rp_active_time = td()

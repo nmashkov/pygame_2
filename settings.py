@@ -59,7 +59,8 @@ wind_strength = 4000
 warmup_time = 1
 
 # train player and stats settings
-health = 3
+health = 4
+game_timer = 2
 
 # train difficulty step values
 

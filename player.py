@@ -71,29 +71,17 @@ class Player:
                 pygame.event.Event(settings.STOP_STAGE))
             variables.SESSION_STAGE = 'RESULT'
 
-    def update(self):
-        # playet check death
-        if self.body.position.x < 50 or self.body.position.x > 650:
-            if self.health > 1:
-                self.health -= 1
-                variables.health -= 1
+    def update(self, minutes=settings.game_timer):
+        # player chech timer
+        if variables.SESSION_STAGE not in ('START_MENU',
+                                           'PRE_EXAM',
+                                           'STOP_STAGE',
+                                           'RESULT'):
+            if minutes == settings.game_timer:
                 player_log.info(
                     {
                         'time': str(dt.now()),
-                        'message': 'death',
-                        'health': self.health,
-                        'player_pos': f'{self.body.position.x:.1f}'
-                    }
-                )
-                self.body.position = (settings.WIDTH // 2,
-                                      settings.HEIGHT // 2)
-            else:
-                self.health -= 1
-                variables.health -= 1
-                player_log.info(
-                    {
-                        'time': str(dt.now()),
-                        'message': 'game_over',
+                        'message': 'time_out',
                         'health': self.health,
                         'player_pos': f'{self.body.position.x:.1f}'
                     }
@@ -101,6 +89,38 @@ class Player:
                 self.change_state()
                 self.body.position = (settings.WIDTH // 2,
                                       settings.HEIGHT // 2)
+            # playet check death
+            if self.body.position.x < 50 or self.body.position.x > 650:
+                if self.health > 1:
+                    self.health -= 1
+                    variables.health -= 1
+                    player_log.info(
+                        {
+                            'time': str(dt.now()),
+                            'message': 'death',
+                            'health': self.health,
+                            'player_pos': f'{self.body.position.x:.1f}'
+                        }
+                    )
+                    self.body.position = (settings.WIDTH // 2,
+                                          settings.HEIGHT // 2)
+                    self.body.force = (0, 0)
+                    variables.wind_direction = 0
+                    variables.wind_direction_prev = 0
+                else:
+                    self.health -= 1
+                    variables.health -= 1
+                    player_log.info(
+                        {
+                            'time': str(dt.now()),
+                            'message': 'game_over',
+                            'health': self.health,
+                            'player_pos': f'{self.body.position.x:.1f}'
+                        }
+                    )
+                    self.change_state()
+                    self.body.position = (settings.WIDTH // 2,
+                                          settings.HEIGHT // 2)
         # player controls
         key = pygame.key.get_pressed()
         if variables.SESSION_STAGE not in ('START_MENU',

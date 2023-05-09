@@ -46,16 +46,16 @@ class App:
             pygame.display.set_caption(f'{self.app_name}. '
                                        f'FPS: {current_fps:.2f}')
 
-    def update(self, player_body):
+    def update(self, player_body, minutes):
         # wind
         player_body.force += (variables.wind_direction *
                               settings.wind_strength, 0)
         # player
-        self.player.update()
+        self.player.update(minutes)
 
-    def draw(self, player_body, minutes, seconds):
+    def draw(self, minutes, seconds):
         self.space.debug_draw(self.draw_options)
-        ui.ui_game(self.screen, self.font, player_body, minutes, seconds)
+        ui.ui_game(self.screen, self.font, minutes, seconds)
         pygame.display.flip()
 
     def start_menu(self):
@@ -112,8 +112,8 @@ class App:
         if not variables.is_warmuped:
             self.warmup()
 
-        self.update(player_body)
-        self.draw(player_body, minutes, seconds)
+        self.update(player_body, minutes)
+        self.draw(minutes, seconds)
 
         self.app_caption('game')
 
@@ -134,6 +134,7 @@ class App:
                 pygame.event.post(pygame.event.Event(settings.START_EXAM))
                 variables.SESSION_STAGE = 'START_EXAM'
                 pygame.time.set_timer(settings.WIND, settings.wind_timer)
+                variables.ticks = pygame.time.get_ticks()
                 in_pre_exam = False
 
             ui.ui_pre_exam(self.screen, self.font)
@@ -149,8 +150,8 @@ class App:
         if not variables.is_warmuped:
             self.warmup()
 
-        self.update(player_body)
-        self.draw(player_body, minutes, seconds)
+        self.update(player_body, minutes)
+        self.draw(minutes, seconds)
 
         self.app_caption('game')
 
@@ -191,15 +192,11 @@ class App:
         while True:
             # delta_t = self.clock.tick(self.fps) * 0.001 * 60
 
-            ticks = pygame.time.get_ticks()
+            ticks = pygame.time.get_ticks() - variables.ticks
             seconds = int(ticks/1000 % 60)
             minutes = int(ticks/60000 % 24)
 
             event_handler()
-
-            if variables.SESSION_STAGE == 'START_TRAIN':
-                self.train(player_body, minutes, seconds)
-                self.player.log_player_pos()
 
             if variables.SESSION_STAGE == 'START_EXAM':
                 self.exam(player_body, minutes, seconds)
@@ -207,6 +204,10 @@ class App:
 
             if variables.SESSION_STAGE == 'PRE_EXAM':
                 self.pre_exam()
+
+            if variables.SESSION_STAGE == 'START_TRAIN':
+                self.train(player_body, minutes, seconds)
+                self.player.log_player_pos()
 
             if variables.SESSION_STAGE == 'RESULT':
                 break

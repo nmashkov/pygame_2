@@ -1,3 +1,4 @@
+import pygame
 import datetime as dt
 
 import settings
@@ -6,6 +7,7 @@ import settings
 SESSION_STAGE = ''
 # START_MENU, START_TRAIN, PRE_EXAM, START_EXAM, STOP_STAGE, RESULT
 
+ticks = pygame.time.get_ticks()
 health = settings.health
 wind_direction = 0
 wind_direction_prev = 0
