@@ -26,7 +26,6 @@ class Player:
         self.mass = settings.player_mass
         self.shape.color = settings.player_color
         self.shape.friction = settings.player_friction
-        # self.app.space.add(self.body, self.shape)
         # controls
         self.left_button_1 = settings.LEFT_1
         self.right_button_1 = settings.RIGHT_1
@@ -46,21 +45,62 @@ class Player:
         self.app.space.add(self.body, self.shape)
         return body, shape
 
-    def draw(self):
-        # drawing player ball
-        pass
-
     def log_player_pos(self):
         if variables.pl_pos_log:
             player_pos_log.info(
                 {
                     'time': f'{dt.now()}',
-                    'player_pos': self.body.position
+                    'player_pos': f'{self.body.position.x:.1f}'
                 }
             )
             variables.pl_pos_log = False
 
+    def change_state(self):
+        # SESSION STATE CHANGE
+        if variables.SESSION_STAGE == 'START_TRAIN':
+            variables.SESSION_STAGE = 'STOP_STAGE'
+            pygame.event.post(
+                pygame.event.Event(settings.STOP_STAGE))
+            variables.SESSION_STAGE = 'PRE_EXAM'
+            pygame.event.post(
+                pygame.event.Event(settings.PRE_EXAM))
+            self.health = settings.exam_health
+        elif variables.SESSION_STAGE == 'START_EXAM':
+            variables.SESSION_STAGE = 'STOP_STAGE'
+            pygame.event.post(
+                pygame.event.Event(settings.STOP_STAGE))
+            variables.SESSION_STAGE = 'RESULT'
+
     def update(self):
+        # playet check death
+        if self.body.position.x < 50 or self.body.position.x > 650:
+            if self.health > 1:
+                self.health -= 1
+                variables.health -= 1
+                player_log.info(
+                    {
+                        'time': str(dt.now()),
+                        'message': 'death',
+                        'health': self.health,
+                        'player_pos': f'{self.body.position.x:.1f}'
+                    }
+                )
+                self.body.position = (settings.WIDTH // 2,
+                                      settings.HEIGHT // 2)
+            else:
+                self.health -= 1
+                variables.health -= 1
+                player_log.info(
+                    {
+                        'time': str(dt.now()),
+                        'message': 'game_over',
+                        'health': self.health,
+                        'player_pos': f'{self.body.position.x:.1f}'
+                    }
+                )
+                self.change_state()
+                self.body.position = (settings.WIDTH // 2,
+                                      settings.HEIGHT // 2)
         # player controls
         key = pygame.key.get_pressed()
         if variables.SESSION_STAGE not in ('START_MENU',
@@ -70,17 +110,17 @@ class Player:
             # move left
             # LP
             if key[self.left_button_1]:
-                self.body.force = ((-settings.player_force, 0))
+                self.body.force -= ((settings.player_force, 0))
             # RP
             if key[self.left_button_2]:
-                self.body.force = ((-settings.player_force, 0))
+                self.body.force -= ((settings.player_force, 0))
             # move right
             # LP
             if key[self.right_button_1]:
-                self.body.force = ((settings.player_force, 0))
+                self.body.force += ((settings.player_force, 0))
             # RP
             if key[self.right_button_2]:
-                self.body.force = ((settings.player_force, 0))
+                self.body.force += ((settings.player_force, 0))
 
         # exit app
         if key[self.exit_button]:

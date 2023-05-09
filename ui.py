@@ -47,7 +47,7 @@ def ui_menu(screen, font: pygame.font.Font):
         (left, top*15))
 
 
-def ui_game(screen, font, player, minutes, seconds):
+def ui_game(screen, font, player_body, minutes, seconds):
     '''hud = pygame.Rect(0, 0, settings.WIDTH, 30)
     pygame.draw.rect(screen, (200, 200, 200), hud)
     three = settings.WIDTH // 3
@@ -61,17 +61,23 @@ def ui_game(screen, font, player, minutes, seconds):
         font.render(f'Очки: {player.score}', True, 'black'),
         (settings.WIDTH - three * .7, 5))'''
     screen.blit(
-            font.render("wind direction: " + str(variables.wind_direction), True, 'black'),
+            font.render("wind direction: " + str(variables.wind_direction),
+                        True, 'black'),
             (100, 100),
         )
     screen.blit(
         font.render("timer: " + str(variables.wind_timer), True, 'black'),
         (100, 130),
     )
-    out = '{minutes:02d}:{seconds:02d}'.format(minutes=minutes, seconds=seconds)
+    out = '{minutes:02d}:{seconds:02d}'.format(minutes=minutes,
+                                               seconds=seconds)
     screen.blit(
                 font.render(out, True, 'black'),
                 (100, 160),
+    )
+    screen.blit(
+                font.render(f'{player_body.force}', True, 'black'),
+                (100, 190),
     )
 
 

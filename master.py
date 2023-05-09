@@ -13,9 +13,7 @@ import variables
 from player import Player
 from earth import Earth
 from boundaries import Boundaries
-from event_manager import (
-    event_handler,
-    START_MENU, START_TRAIN, START_EXAM, RESULT, WIND)
+from event_manager import event_handler
 import ui
 
 
@@ -50,17 +48,18 @@ class App:
 
     def update(self, player_body):
         # wind
-        player_body.force = (variables.wind_direction * settings.wind_strength, 0)
+        player_body.force += (variables.wind_direction *
+                              settings.wind_strength, 0)
         # player
         self.player.update()
 
-    def draw(self, minutes, seconds):
+    def draw(self, player_body, minutes, seconds):
         self.space.debug_draw(self.draw_options)
-        ui.ui_game(self.screen, self.font, self.player, minutes, seconds)
+        ui.ui_game(self.screen, self.font, player_body, minutes, seconds)
         pygame.display.flip()
 
     def start_menu(self):
-        pygame.event.post(pygame.event.Event(START_MENU))
+        pygame.event.post(pygame.event.Event(settings.START_MENU))
         variables.SESSION_STAGE = 'START_MENU'
 
         in_menu = True
@@ -75,8 +74,8 @@ class App:
 
             key = pygame.key.get_pressed()
             if key[settings.START_1] and key[settings.START_2]:
-                pygame.event.post(pygame.event.Event(START_TRAIN))
-                pygame.time.set_timer(WIND, settings.wind_timer)
+                pygame.event.post(pygame.event.Event(settings.START_TRAIN))
+                pygame.time.set_timer(settings.WIND, settings.wind_timer)
                 variables.SESSION_STAGE = 'START_TRAIN'
                 in_menu = False
 
@@ -114,7 +113,7 @@ class App:
             self.warmup()
 
         self.update(player_body)
-        self.draw(minutes, seconds)
+        self.draw(player_body, minutes, seconds)
 
         self.app_caption('game')
 
@@ -122,19 +121,19 @@ class App:
 
         in_pre_exam = True
         while in_pre_exam:
-            delta_t = self.clock.tick(15) / 1000 * 60
+            self.clock.tick(15)
 
             event_handler()
 
             self.screen.fill(self.bg_color)
 
-            self.player.update(delta_t)
+            self.player.update()
 
             key = pygame.key.get_pressed()
             if key[settings.START_1] and key[settings.START_2]:
-                pygame.event.post(pygame.event.Event(START_EXAM))
+                pygame.event.post(pygame.event.Event(settings.START_EXAM))
                 variables.SESSION_STAGE = 'START_EXAM'
-                pygame.time.set_timer(WIND, settings.wind_timer)
+                pygame.time.set_timer(settings.WIND, settings.wind_timer)
                 in_pre_exam = False
 
             ui.ui_pre_exam(self.screen, self.font)
@@ -151,22 +150,22 @@ class App:
             self.warmup()
 
         self.update(player_body)
-        self.draw(minutes, seconds)
+        self.draw(player_body, minutes, seconds)
 
         self.app_caption('game')
 
     def result(self):
-        pygame.event.post(pygame.event.Event(RESULT))
+        pygame.event.post(pygame.event.Event(settings.RESULT))
 
         in_result = True
         while in_result:
-            delta_t = self.clock.tick(15) / 1000 * 60
+            self.clock.tick(15)
 
             event_handler()
 
             self.screen.fill(self.bg_color)
 
-            self.player.update(delta_t)
+            self.player.update()
 
             key = pygame.key.get_pressed()
             if key[settings.EXIT] or key[settings.CONTINUE]:

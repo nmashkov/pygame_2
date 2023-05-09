@@ -1,13 +1,15 @@
 import datetime as dt
 
-# import settings
+import settings
 
 
 SESSION_STAGE = ''
 # START_MENU, START_TRAIN, PRE_EXAM, START_EXAM, STOP_STAGE, RESULT
 
+health = settings.health
 wind_direction = 0
 wind_direction_prev = 0
+wind_strength = settings.wind_strength
 wind_timer = 0
 is_warmuped = False
 

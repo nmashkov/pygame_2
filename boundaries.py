@@ -8,7 +8,6 @@ import settings
 class Boundaries:
     def __init__(self, app):
         self.app = app
-        self.player = self.app.player
         # boundaries params
         self.bounds_w = settings.boundaries_w
         self.bounds_h = settings.boundaries_h

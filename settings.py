@@ -4,6 +4,16 @@ import pathlib
 import pygame
 
 
+START_MENU = pygame.USEREVENT + 1
+START_TRAIN = pygame.USEREVENT + 2
+PRE_EXAM = pygame.USEREVENT + 3
+START_EXAM = pygame.USEREVENT + 4
+STOP_STAGE = pygame.USEREVENT + 5
+RESULT = pygame.USEREVENT + 6
+PLAYER_POS = pygame.USEREVENT + 7
+WIND = pygame.USEREVENT + 8
+
+
 # main game settings
 NAME = 'Игра 2'
 WIDTH, HEIGHT = 700, 900
@@ -20,7 +30,7 @@ player_radius = 30
 player_mass = 10
 player_color = (255, 0, 0, 100)
 player_friction = 0.5
-player_force = 10000
+player_force = 5000
 PLPOSLOG_TIMER = 100
 
 # player controls
@@ -43,7 +53,7 @@ boundaries_h = HEIGHT
 
 # wind settings
 wind_timer = 3000
-wind_strength = 5000
+wind_strength = 4000
 
 # warmup settings
 warmup_time = 1
