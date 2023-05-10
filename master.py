@@ -111,6 +111,9 @@ class App:
 
         if not variables.is_warmuped:
             self.warmup()
+            variables.wind_direction = 0
+            variables.wind_direction_prev = 0
+            variables.ticks = pygame.time.get_ticks()
 
         self.update(player_body, minutes)
         self.draw(minutes, seconds)
@@ -134,7 +137,6 @@ class App:
                 pygame.event.post(pygame.event.Event(settings.START_EXAM))
                 variables.SESSION_STAGE = 'START_EXAM'
                 pygame.time.set_timer(settings.WIND, settings.wind_timer)
-                variables.ticks = pygame.time.get_ticks()
                 in_pre_exam = False
 
             ui.ui_pre_exam(self.screen, self.font)
@@ -149,6 +151,9 @@ class App:
 
         if not variables.is_warmuped:
             self.warmup()
+            variables.wind_direction = 0
+            variables.wind_direction_prev = 0
+            variables.ticks = pygame.time.get_ticks()
 
         self.update(player_body, minutes)
         self.draw(minutes, seconds)

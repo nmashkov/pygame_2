@@ -52,11 +52,11 @@ boundaries_w = WIDTH
 boundaries_h = HEIGHT
 
 # wind settings
-wind_timer = 3000
+wind_timer = 6000
 wind_strength = 4000
 
 # warmup settings
-warmup_time = 1
+warmup_time = 3
 
 # train player and stats settings
 health = 4
