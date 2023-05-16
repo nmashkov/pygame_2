@@ -71,10 +71,11 @@ class Player:
                 pygame.event.Event(settings.STOP_STAGE))
             variables.SESSION_STAGE = 'RESULT'
 
-    def update(self, minutes=settings.game_timer):
+    def update(self):
         # player check timer
         if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
-            if minutes == settings.game_timer:
+            if (variables.minutes >= settings.game_timer and
+                    variables.ticks_current > 100):
                 player_log.info(
                     {
                         'time': str(dt.now()),
@@ -85,6 +86,8 @@ class Player:
                 )
                 self.change_state()
                 self.body.position = settings.player_position
+                self.body.force = (0, 0)
+                self.body.angular_velocity = 0
             # playet check death
             if self.body.position.x < 50 or self.body.position.x > 650:
                 if self.health > 1:
@@ -100,11 +103,15 @@ class Player:
                     )
                     self.body.position = settings.player_position
                     self.body.force = (0, 0)
+                    self.body.angular_velocity = 0
                     variables.wind_direction = 0
                     variables.wind_direction_prev = 0
                     variables.wind_timer = 3000
                     pygame.time.set_timer(settings.WIND, 0)
-                    pygame.time.set_timer(settings.WIND, variables.wind_timer)
+                    pygame.time.set_timer(settings.WIND, settings.wind_timer)
+                    variables.ad_freezed = True
+                    pygame.time.set_timer(settings.UNFREEZE,
+                                          settings.UNFREEZE_TIMER)
                 else:
                     self.health -= 1
                     variables.health -= 1
@@ -119,9 +126,11 @@ class Player:
                     self.change_state()
                     self.body.position = settings.player_position
                     self.body.force = (0, 0)
+                    self.body.angular_velocity = 0
         # player controls
         key = pygame.key.get_pressed()
-        if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
+        if (variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM') and
+                not variables.ad_freezed):
             # move left
             # LP
             if key[self.left_button_1]:

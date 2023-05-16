@@ -24,6 +24,7 @@ STOP_STAGE = pygame.USEREVENT + 5
 RESULT = pygame.USEREVENT + 6
 PLAYER_POS = pygame.USEREVENT + 7
 WIND = pygame.USEREVENT + 8
+UNFREEZE = pygame.USEREVENT + 9
 
 # colors
 accent = (41, 166, 236)
@@ -43,6 +44,7 @@ player_color = (219, 59, 59, 100)
 player_friction = 0.5
 player_force = 5000
 PLPOSLOG_TIMER = 100
+UNFREEZE_TIMER = 600
 
 # player controls
 LEFT_1 = pygame.K_a

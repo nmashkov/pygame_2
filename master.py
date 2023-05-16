@@ -67,13 +67,17 @@ class App:
         debug(variables.cooperative_time, 'cooperative_time', 290)
         if player_body:
             debug(player_body.force, 'player_body.force', 310)
+            debug(player_body.angular_velocity,
+                  'player_body.angular_velocity', 330)
+        debug(variables.minutes, 'variables.minutes', 350)
+        debug(variables.ticks_current, 'variables.ticks_current', 370)
 
-    def update(self, player_body, minutes):
+    def update(self, player_body):
         # wind
         player_body.force += (variables.wind_direction *
                               settings.wind_strength, 0)
         # player
-        self.player.update(minutes)
+        self.player.update()
         if variables.debug_activated:
             self.debug_panel(player_body)
 
@@ -136,6 +140,7 @@ class App:
 
         variables.is_warmuped = True
         # reset timers
+        variables.ticks_current = 0
         variables.ticks = pygame.time.get_ticks()
         variables.start_stage_time = dt.now()
         # start pl pos logs
@@ -153,13 +158,12 @@ class App:
         if not variables.is_warmuped:
             self.warmup()
 
-        self.update(player_body, minutes)
+        self.update(player_body)
         self.draw(minutes, seconds)
 
         self.app_caption('game')
 
     def pre_exam(self):
-
         in_pre_exam = True
         while in_pre_exam:
             self.clock.tick(15)
@@ -228,6 +232,8 @@ class App:
             ticks = pygame.time.get_ticks() - variables.ticks
             seconds = int(ticks / 1000 % 60)
             minutes = int(ticks / 60000 % 24)
+            variables.ticks_current = ticks
+            variables.minutes = minutes
 
             event_handler()
 

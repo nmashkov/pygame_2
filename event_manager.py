@@ -434,6 +434,10 @@ def event_handler():
         # PLAYER POS EVENT
         if events.type == settings.PLAYER_POS:
             variables.pl_pos_log = True
+        # AFTER DEAD DEACTIVATE FREEZING
+        if events.type == settings.UNFREEZE:
+            variables.ad_freezed = False
+            pygame.time.set_timer(settings.UNFREEZE, 0)
         # CHANGE WIND DIRECTION
         if events.type == settings.WIND:
             if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):

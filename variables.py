@@ -11,10 +11,15 @@ SESSION_STAGE = ''
 ticks = pygame.time.get_ticks()
 health = settings.health
 
+ticks_current = 0
+minutes = 0
+
 wind_direction = 0
 wind_direction_prev = 0
 wind_strength = settings.wind_strength
 wind_timer = 0
+
+ad_freezed = False
 
 is_warmuped = False
 debug_activated = False
