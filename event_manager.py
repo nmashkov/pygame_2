@@ -16,6 +16,65 @@ log_file = 'wind.json'
 wind_log = setup_logger('wind_logger', log_file)
 
 
+def get_template(template: str):
+    time = f'{dt.now()}'
+
+    temp_coop_end = {
+        'time': time,
+        'message': 'COOP_END',
+        'cooperation_time': str(variables.cooperative_time.seconds)
+    }
+    temp_conf_end = {
+        'time': time,
+        'message': 'CONFLICT_END',
+        'conflict_time': str(variables.conflict_time.seconds)
+    }
+
+    temp_dict = {
+        'temp_coop_end': temp_coop_end,
+        'temp_conf_end': temp_conf_end
+    }
+
+    return temp_dict[template]
+
+
+def log_info(logger, template: str):
+    return logger.info(get_template(template))
+
+
+def print_results(stage):
+    if variables.active_p == 'LEFT_P':
+        player_p = 'ЛИ'
+    else:
+        player_p = 'ПИ'
+    if variables.active_kpush_p == 'LEFT_P':
+        player_kp = 'ЛИ'
+    else:
+        player_kp = 'ПИ'
+    if stage == 'PRE_EXAM':
+        stage_name = 'Результаты тренировки:'
+        stage_name_2 = 'тренировки'
+    elif stage == 'RESULT':
+        stage_name = 'Результаты зачёта:'
+        stage_name_2 = 'зачёта'
+    results_dict = [
+        '',
+        '---------------------------------------',
+        f'{stage_name}',
+        f'Количество очков - {variables.health}',
+        f'Общее время {stage_name_2} - {variables.stage_time}',
+        f'Самый активный игрок (по времени) - {player_p}',
+        f'Самый активный игрок (по нажатиям) - {player_kp}',
+        f'Общее время кооперации - {variables.cooperative_time}',
+        f'Общее время конфликта - {variables.conflict_time}'
+    ]
+    results_file = 'results.txt'
+    dir = (f'{settings.BASE_DIR}/{settings.BASE_LOGS_DIR}/'
+           f'{settings.SESSION_DIR}/{results_file}')
+    with open(dir, 'a') as f:
+        f.write('\n'.join(results_dict))
+
+
 def get_wind(wind_direction_prev):
     new_dir = 0
     if wind_direction_prev == 0:
@@ -372,159 +431,26 @@ def player_events(events):
 def event_handler():
     for events in pygame.event.get():
         # EVENTS SECTION
-        # START MENU
-        if events.type == settings.START_MENU:
-            event_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_MENU',
-                    'SESSION': f'{settings.SESSION_DIR}'
-                }
-            )
-        # START TRAIN STATE
-        if events.type == settings.START_TRAIN:
-            variables.ticks = pygame.time.get_ticks()
-            variables.is_warmuped = False
+        # PLAYER POS EVENT
+        if events.type == settings.PLAYER_POS:
             variables.pl_pos_log = True
-            pygame.time.set_timer(settings.PLAYER_POS, settings.PLPOSLOG_TIMER)
-            variables.start_stage_time = dt.now()
-            event_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_TRAIN'
-                }
-            )
-            player_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_TRAIN'
-                }
-            )
-            player_pos_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_TRAIN'
-                }
-            )
-            wind_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_TRAIN'
-                }
-            )
-        # PRE EXAM STATE
-        if events.type == settings.PRE_EXAM:
-            event_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'PRE_EXAM'
-                }
-            )
-            if variables.lp_active_time >= variables.rp_active_time:
-                variables.active_p = 'LEFT_P'
-            else:
-                variables.active_p = 'RIGHT_P'
-            if variables.lp_key_pushes >= variables.rp_key_pushes:
-                variables.active_kpush_p = 'LEFT_P'
-            else:
-                variables.active_kpush_p = 'RIGHT_P'
-            player_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'PRE_EXAM',
-                    'stage_time': f'{variables.stage_time}',
-                    'active_p': variables.active_p,
-                    'lp_act_t': f'{variables.lp_active_time}',
-                    'rp_act_t': f'{variables.rp_active_time}',
-                    'active_kpush_p': variables.active_kpush_p,
-                    'lp_kpush': variables.lp_key_pushes,
-                    'rp_kpush': variables.rp_key_pushes,
-                    'coop_time': f'{variables.cooperative_time}',
-                    'conflict_time': f'{variables.conflict_time}',
-                    'health': f'{variables.health}'
-                }
-            )
-            player_pos_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'PRE_EXAM'
-                }
-            )
-        # START EXAM SESSION
-        if events.type == settings.START_EXAM:
-            # RESET VARIABLES
-            variables.ticks = pygame.time.get_ticks()
-            variables.is_warmuped = False
-            variables.lp_active_time = td()
-            variables.rp_active_time = td()
-            variables.lp_key_pushes = 0
-            variables.rp_key_pushes = 0
-            variables.cooperative_time = td()
-            variables.conflict_time = td()
-            variables.health = settings.exam_health
-            variables.wind_direction = 0
-            variables.wind_direction_prev = 0
-            # PREPARE EXAM
-            variables.start_stage_time = dt.now()
-            event_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_EXAM'
-                }
-            )
-            player_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_EXAM'
-                }
-            )
-            player_pos_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_EXAM'
-                }
-            )
-            wind_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'START_EXAM'
-                }
-            )
-            variables.pl_pos_log = True
-            pygame.time.set_timer(settings.PLAYER_POS, settings.PLPOSLOG_TIMER)
-        # STOP STAGE
-        if events.type == settings.STOP_STAGE:
-            pygame.time.set_timer(settings.PLAYER_POS, 0)
-            variables.pl_pos_log = False
-            variables.stage_time = dt.now() - variables.start_stage_time
-            event_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'STOP_STAGE',
-                    'stage_time': f'{variables.stage_time}'
-                }
-            )
-            player_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'STOP_STAGE',
-                    'stage_time': f'{variables.stage_time}'
-                }
-            )
-            player_pos_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'STOP_STAGE',
-                    'stage_time': f'{variables.stage_time}'
-                }
-            )
-            wind_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'message': 'STOP_STAGE',
-                    'stage_time': f'{variables.stage_time}'
-                }
-            )
+        # CHANGE WIND DIRECTION
+        if events.type == settings.WIND:
+            if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
+                (variables.wind_direction,
+                    variables.wind_direction_prev) = get_wind(
+                    variables.wind_direction_prev)
+                pygame.time.set_timer(settings.WIND, 0)
+                variables.wind_timer = rnd.randrange(2000, 4000, 1000)
+                pygame.time.set_timer(settings.WIND, variables.wind_timer)
+                wind_log.info(
+                    {
+                        'time': f'{dt.now()}',
+                        'message': 'wind_change',
+                        'wind_direction': f'{variables.wind_direction}',
+                        'wind_strength': f'{variables.wind_strength}'
+                    }
+                )
         # RESULT
         if events.type == settings.RESULT:
             event_log.info(
@@ -557,9 +483,167 @@ def event_handler():
                     'health': f'{variables.health}'
                 }
             )
-        # PLAYER POS EVENT
-        if events.type == settings.PLAYER_POS:
-            variables.pl_pos_log = True
+            print_results('RESULT')
+        # STOP STAGE
+        elif events.type == settings.STOP_STAGE:
+            # stop wind
+            pygame.time.set_timer(settings.WIND, 0)
+            # stop pl pos logs
+            pygame.time.set_timer(settings.PLAYER_POS, 0)
+            variables.pl_pos_log = False
+            # check coop, conflict and acc stopping
+            if variables.coop_started:
+                variables.coop_started = False
+                variables.cooperative_time += (
+                    dt.now() - variables.start_cooperative_time)
+                log_info(player_log, 'temp_coop_end')
+            if variables.conflict_started:
+                variables.conflict_started = False
+                variables.conflict_time += (
+                    dt.now() - variables.start_conflict_time)
+                log_info(player_log, 'temp_conf_end')
+            variables.stage_time = dt.now() - variables.start_stage_time
+            event_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'STOP_STAGE',
+                    'stage_time': f'{variables.stage_time}'
+                }
+            )
+            player_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'STOP_STAGE',
+                    'stage_time': f'{variables.stage_time}'
+                }
+            )
+            player_pos_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'STOP_STAGE',
+                    'stage_time': f'{variables.stage_time}'
+                }
+            )
+            wind_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'STOP_STAGE',
+                    'stage_time': f'{variables.stage_time}'
+                }
+            )
+        # START EXAM SESSION
+        elif events.type == settings.START_EXAM:
+            # RESET VARIABLES
+            variables.is_warmuped = False
+            variables.lp_active_time = td()
+            variables.rp_active_time = td()
+            variables.lp_key_pushes = 0
+            variables.rp_key_pushes = 0
+            variables.cooperative_time = td()
+            variables.conflict_time = td()
+            # PREPARE EXAM
+            variables.health = settings.exam_health
+            variables.wind_direction = 0
+            variables.wind_direction_prev = 0
+            event_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_EXAM'
+                }
+            )
+            player_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_EXAM'
+                }
+            )
+            player_pos_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_EXAM'
+                }
+            )
+            wind_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_EXAM'
+                }
+            )
+        # PRE EXAM STATE
+        elif events.type == settings.PRE_EXAM:
+            if variables.lp_active_time >= variables.rp_active_time:
+                variables.active_p = 'LEFT_P'
+            else:
+                variables.active_p = 'RIGHT_P'
+            if variables.lp_key_pushes >= variables.rp_key_pushes:
+                variables.active_kpush_p = 'LEFT_P'
+            else:
+                variables.active_kpush_p = 'RIGHT_P'
+            player_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'PRE_EXAM',
+                    'stage_time': f'{variables.stage_time}',
+                    'active_p': variables.active_p,
+                    'lp_act_t': f'{variables.lp_active_time}',
+                    'rp_act_t': f'{variables.rp_active_time}',
+                    'active_kpush_p': variables.active_kpush_p,
+                    'lp_kpush': variables.lp_key_pushes,
+                    'rp_kpush': variables.rp_key_pushes,
+                    'coop_time': f'{variables.cooperative_time}',
+                    'conflict_time': f'{variables.conflict_time}',
+                    'health': f'{variables.health}'
+                }
+            )
+            print_results('PRE_EXAM')
+            player_pos_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'PRE_EXAM'
+                }
+            )
+            event_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'PRE_EXAM'
+                }
+            )
+        # START TRAIN STATE
+        elif events.type == settings.START_TRAIN:
+            variables.is_warmuped = False
+            event_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_TRAIN'
+                }
+            )
+            player_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_TRAIN'
+                }
+            )
+            player_pos_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_TRAIN'
+                }
+            )
+            wind_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_TRAIN'
+                }
+            )
+        # START MENU
+        elif events.type == settings.START_MENU:
+            event_log.info(
+                {
+                    'time': f'{dt.now()}',
+                    'message': 'START_MENU',
+                    'SESSION': f'{settings.SESSION_DIR}'
+                }
+            )
         # QUIT APP
         if events.type == pygame.QUIT:
             event_log.info(
@@ -571,24 +655,13 @@ def event_handler():
             )
             pygame.quit()
             sys.exit()
-        # CHANGE WIND DIRECTION
-        if events.type == settings.WIND:
-            (variables.wind_direction,
-                variables.wind_direction_prev) = get_wind(
-                variables.wind_direction_prev)
-            pygame.time.set_timer(settings.WIND, 0)
-            variables.wind_timer = rnd.randrange(2000, 4000, 1000)
-            pygame.time.set_timer(settings.WIND, variables.wind_timer)
-            wind_log.info(
-                {
-                    'time': f'{dt.now()}',
-                    'wind_direction': f'{variables.wind_direction}',
-                    'wind_strength': f'{variables.wind_strength}'
-                }
-            )
+        # ACTIVATE DEBUG PANEL
+        if events.type == pygame.KEYDOWN:
+            if events.key == settings.DEBUG and events.mod == pygame.KMOD_LALT:
+                if not variables.debug_activated:
+                    variables.debug_activated = True
+                else:
+                    variables.debug_activated = False
 
-        if variables.SESSION_STAGE not in ('START_MENU',
-                                           'STOP_STAGE',
-                                           'PRE_EXAM',
-                                           'RESULT'):
+        if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
             player_events(events)

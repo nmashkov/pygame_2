@@ -13,5 +13,6 @@ class Earth:
         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
         self.body.position = (settings.WIDTH // 2, settings.HEIGHT)
         self.shape = pymunk.Circle(self.body, self.earth_radius)
+        self.shape.color = settings.light_grey
         self.shape.friction = settings.earth_friction
         self.app.space.add(self.body, self.shape)

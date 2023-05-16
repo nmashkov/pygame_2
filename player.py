@@ -21,7 +21,7 @@ class Player:
         # ball params
         self.player_radius = settings.player_radius
         self.body = pymunk.Body()
-        self.body.position = (settings.WIDTH // 2, settings.HEIGHT // 2)
+        self.body.position = settings.player_position
         self.shape = pymunk.Circle(self.body, self.player_radius)
         self.mass = settings.player_mass
         self.shape.color = settings.player_color
@@ -72,11 +72,8 @@ class Player:
             variables.SESSION_STAGE = 'RESULT'
 
     def update(self, minutes=settings.game_timer):
-        # player chech timer
-        if variables.SESSION_STAGE not in ('START_MENU',
-                                           'PRE_EXAM',
-                                           'STOP_STAGE',
-                                           'RESULT'):
+        # player check timer
+        if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
             if minutes == settings.game_timer:
                 player_log.info(
                     {
@@ -87,8 +84,7 @@ class Player:
                     }
                 )
                 self.change_state()
-                self.body.position = (settings.WIDTH // 2,
-                                      settings.HEIGHT // 2)
+                self.body.position = settings.player_position
             # playet check death
             if self.body.position.x < 50 or self.body.position.x > 650:
                 if self.health > 1:
@@ -102,8 +98,7 @@ class Player:
                             'player_pos': f'{self.body.position.x:.1f}'
                         }
                     )
-                    self.body.position = (settings.WIDTH // 2,
-                                          settings.HEIGHT // 2)
+                    self.body.position = settings.player_position
                     self.body.force = (0, 0)
                     variables.wind_direction = 0
                     variables.wind_direction_prev = 0
@@ -122,14 +117,11 @@ class Player:
                         }
                     )
                     self.change_state()
-                    self.body.position = (settings.WIDTH // 2,
-                                          settings.HEIGHT // 2)
+                    self.body.position = settings.player_position
+                    self.body.force = (0, 0)
         # player controls
         key = pygame.key.get_pressed()
-        if variables.SESSION_STAGE not in ('START_MENU',
-                                           'PRE_EXAM',
-                                           'STOP_STAGE',
-                                           'RESULT'):
+        if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
             # move left
             # LP
             if key[self.left_button_1]:

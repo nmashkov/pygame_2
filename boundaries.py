@@ -21,4 +21,5 @@ class Boundaries:
             self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
             self.body.position = pos
             self.shape = pymunk.Poly.create_box(self.body, size)
+            self.shape.color = settings.light_grey2
             self.app.space.add(self.body, self.shape)
