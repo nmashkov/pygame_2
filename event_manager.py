@@ -76,12 +76,20 @@ def print_results(stage):
 
 
 def get_wind(wind_direction_prev):
-    new_dir = 0
     if wind_direction_prev == 0:
-        new_dir = rnd.choice([-1, 1])
+        variables.wind_direction = rnd.choice([-1, 1])
+        if variables.SESSION_STAGE == 'START_TRAIN':
+            variables.wind_timer = rnd.randrange(settings.wt_start,
+                                                 settings.wt_end, 1000)
+        else:
+            variables.wind_timer = rnd.randrange(settings.ex_wt_start,
+                                                 settings.ex_wt_end, 1000)
     else:
-        new_dir = 0
-    return new_dir, new_dir
+        variables.wind_direction = 0
+        if variables.SESSION_STAGE == 'START_TRAIN':
+            variables.wind_timer = settings.wt_zero
+        else:
+            variables.wind_timer = settings.ex_wt_zero
 
 
 def player_events(events):
@@ -441,18 +449,15 @@ def event_handler():
         # CHANGE WIND DIRECTION
         if events.type == settings.WIND:
             if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
-                (variables.wind_direction,
-                    variables.wind_direction_prev) = get_wind(
-                    variables.wind_direction_prev)
                 pygame.time.set_timer(settings.WIND, 0)
-                variables.wind_timer = rnd.randrange(2000, 4000, 1000)
+                get_wind(variables.wind_direction)
                 pygame.time.set_timer(settings.WIND, variables.wind_timer)
                 wind_log.info(
                     {
                         'time': f'{dt.now()}',
                         'message': 'wind_change',
                         'wind_direction': f'{variables.wind_direction}',
-                        'wind_strength': f'{variables.wind_strength}'
+                        'wind_timer': f'{variables.wind_timer}'
                     }
                 )
         # RESULT

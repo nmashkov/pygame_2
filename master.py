@@ -53,24 +53,23 @@ class App:
 
     def debug_panel(self, player_body=0):
         debug(variables.SESSION_STAGE, 'SESSION_STAGE')
-        debug(variables.health, 'health', 70)
-        debug(variables.wind_direction, 'wind_direction', 90)
-        debug(variables.wind_direction_prev, 'wind_direction_prev', 110)
-        debug(variables.wind_timer, 'wind_timer', 130)
-        debug(variables.lp_active_time, 'lp_active_time', 150)
-        debug(variables.lp_key_pushes, 'lp_key_pushes', 170)
-        debug(variables.rp_active_time, 'rp_active_time', 190)
-        debug(variables.rp_key_pushes, 'rp_key_pushes', 210)
-        debug(variables.conflict, 'conflict', 230)
-        debug(variables.conflict_time, 'conflict_time', 250)
-        debug(variables.cooperation, 'cooperation', 270)
-        debug(variables.cooperative_time, 'cooperative_time', 290)
+        debug(variables.health, 'health', 80)
+        debug(variables.wind_direction, 'wind_direction', 100)
+        debug(variables.wind_timer, 'wind_timer', 120)
+        debug(variables.lp_active_time, 'lp_active_time', 140)
+        debug(variables.lp_key_pushes, 'lp_key_pushes', 160)
+        debug(variables.rp_active_time, 'rp_active_time', 180)
+        debug(variables.rp_key_pushes, 'rp_key_pushes', 200)
+        debug(variables.conflict, 'conflict', 220)
+        debug(variables.conflict_time, 'conflict_time', 240)
+        debug(variables.cooperation, 'cooperation', 260)
+        debug(variables.cooperative_time, 'cooperative_time', 280)
         if player_body:
-            debug(player_body.force, 'player_body.force', 310)
-            debug(player_body.angular_velocity,
-                  'player_body.angular_velocity', 330)
-        debug(variables.minutes, 'variables.minutes', 350)
-        debug(variables.ticks_current, 'variables.ticks_current', 370)
+            debug(player_body.force, 'player_body.force', 300)
+            debug(f'{player_body.angular_velocity:.2f}',
+                  'player_body.angular_velocity', 320)
+        debug(variables.minutes, 'variables.minutes', 340)
+        debug(variables.ticks_current, 'variables.ticks_current', 360)
 
     def update(self, player_body):
         # wind
@@ -99,6 +98,8 @@ class App:
             event_handler()
 
             self.screen.fill(self.bg_color)
+
+            self.space.debug_draw(self.draw_options)
 
             self.player.update()
 
@@ -220,14 +221,13 @@ class App:
 
     def run(self):
 
-        self.start_menu()
-
         player_body, player_shape = self.player.create_player()
+
+        self.start_menu()
 
         delta_t = 1 / self.fps
 
         while True:
-            # delta_t = self.clock.tick(self.fps) * 0.001 * 60
 
             ticks = pygame.time.get_ticks() - variables.ticks
             seconds = int(ticks / 1000 % 60)

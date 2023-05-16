@@ -15,7 +15,6 @@ ticks_current = 0
 minutes = 0
 
 wind_direction = 0
-wind_direction_prev = 0
 wind_strength = settings.wind_strength
 wind_timer = 0
 

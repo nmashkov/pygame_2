@@ -76,6 +76,16 @@ warmup_time = 3
 health = 3
 game_timer = 1
 
+# train difficulty steps
+wt_start = 2000
+wt_end = 4000
+wt_zero = 1500
+
 # exam player and stats settings
 exam_health = 3
 exam_game_timer = 1
+
+# exam difficulty steps
+ex_wt_start = 1000
+ex_wt_end = 4000
+ex_wt_zero = 1000
