@@ -7,10 +7,42 @@ import variables
 from fonts import (title1, title2, base, base2)
 
 
+def ui_credits(screen):
+    top = 30
+    left = 70
+    center = settings.WIDTH // 2
+    #
+    screen.blit(title1.render(settings.NAME, True, dark_grey),
+                (center - 66, top))
+    screen.blit(base2.render('Идея', True, dark_grey),
+                (left, top*4))
+    text = base2.render('Малишевский А.В.', True, dark_grey)
+    screen.blit(text,
+                (settings.WIDTH - left - text.get_width(), top*4))
+    screen.blit(base2.render('Разработка', True, dark_grey),
+                (left, top*5.5))
+    text = base2.render('Машков Н.А.', True, dark_grey)
+    screen.blit(text,
+                (settings.WIDTH - left - text.get_width(), top*5.5))
+    screen.blit(base2.render('Дизайн', True, dark_grey),
+                (left, top*7))
+    text = base2.render('Мануйленко Е.В.', True, dark_grey)
+    screen.blit(text,
+                (settings.WIDTH - left - text.get_width(), top*7))
+    #
+    text = base2.render('СПбГУ ГА', True, dark_grey)
+    screen.blit(text,
+                (settings.WIDTH // 2 - text.get_width()*.5, top*11))
+    text = base.render('2023', True, dark_grey)
+    screen.blit(text,
+                (settings.WIDTH // 2 - text.get_width()*.5, top*12))
+
+
 def ui_menu(screen):
     top = 30
     left = 70
     center = settings.WIDTH // 2
+    #
     screen.blit(title1.render(settings.NAME, True, dark_grey),
                 (center - 66, top))
     screen.blit(title2.render('Управление', True, dark_grey),

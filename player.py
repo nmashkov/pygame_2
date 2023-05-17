@@ -145,7 +145,3 @@ class Player:
             # RP
             if key[self.right_button_2]:
                 self.body.force += ((settings.player_force, 0))
-
-        # exit app
-        if key[self.exit_button] and key[pygame.K_LALT]:
-            pygame.event.post(self.app.quit_event)

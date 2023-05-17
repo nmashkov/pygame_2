@@ -17,7 +17,7 @@ from player import Player
 from earth import Earth
 from boundaries import Boundaries
 from event_manager import event_handler
-from fonts import base2
+from fonts import base2, button as bt
 import ui
 from debug import debug
 
@@ -85,6 +85,72 @@ class App:
         ui.ui_game(self.screen, minutes, seconds)
         pygame.display.update()
 
+    def button_in(self):
+        top = 30
+        clicked = False
+
+        button = pygame.Rect(settings.WIDTH-top - 40, top*1, 40, 40)
+        pygame.draw.rect(self.screen, (255, 255, 255), button)
+        button_inner = pygame.Rect(settings.WIDTH-top - 38, top*1+2,
+                                   36, 36)
+        pygame.draw.rect(self.screen, settings.back1, button_inner)
+        self.screen.blit(bt.render('i', True, (255, 255, 255)),  # 5
+                         (settings.WIDTH-top-22, top*1+8))
+
+        pos = pygame.mouse.get_pos()
+
+        # check mouseover and clicked conditions
+        if button.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and not clicked:
+                clicked = True
+                self.credits()
+
+    def button_out(self):
+        top = 30
+        clicked = False
+        in_credits = True
+
+        button = pygame.Rect(settings.WIDTH-top - 40, top*1, 40, 40)
+        pygame.draw.rect(self.screen, (255, 255, 255), button)
+        button_inner = pygame.Rect(settings.WIDTH-top - 38, top*1+2,
+                                   36, 36)
+        pygame.draw.rect(self.screen, settings.back1, button_inner)
+        self.screen.blit(bt.render('H', True, (255, 255, 255)),  # 15
+                         (settings.WIDTH-top-27, top*1+8))
+
+        pos = pygame.mouse.get_pos()
+
+        # check mouseover and clicked conditions
+        if button.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and not clicked:
+                clicked = True
+                in_credits = False
+
+        return in_credits
+
+    def credits(self):
+        in_credits = True
+        while in_credits:
+            self.clock.tick(15)
+
+            event_handler()
+
+            self.screen.fill(self.bg_color)
+
+            in_credits = self.button_out()
+
+            self.space.debug_draw(self.draw_options)
+
+            key = pygame.key.get_pressed()
+            if key[pygame.K_ESCAPE]:
+                in_credits = False
+
+            ui.ui_credits(self.screen)
+
+            pygame.display.update()
+
+            self.app_caption('menu')
+
     def start_menu(self):
         pygame.event.post(pygame.event.Event(settings.START_MENU))
         variables.SESSION_STAGE = 'START_MENU'
@@ -98,6 +164,8 @@ class App:
             event_handler()
 
             self.screen.fill(self.bg_color)
+
+            self.button_in()
 
             self.space.debug_draw(self.draw_options)
 
