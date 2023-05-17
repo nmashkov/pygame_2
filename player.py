@@ -147,5 +147,5 @@ class Player:
                 self.body.force += ((settings.player_force, 0))
 
         # exit app
-        if key[self.exit_button]:
+        if key[self.exit_button] and key[pygame.K_LALT]:
             pygame.event.post(self.app.quit_event)

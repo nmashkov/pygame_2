@@ -2,7 +2,7 @@ import pygame
 from datetime import datetime as dt
 
 import settings
-from settings import dark_grey
+from settings import dark_grey, accent
 import variables
 from fonts import (title1, title2, base, base2)
 
@@ -14,38 +14,62 @@ def ui_menu(screen):
     screen.blit(title1.render(settings.NAME, True, dark_grey),
                 (center - 66, top))
     screen.blit(title2.render('Управление', True, dark_grey),
-                (center - 70, top*4))
+                (center - 70, top*3.5))
     # ЛИ
     screen.blit(base2.render('Левый игрок (ЛИ)', True, dark_grey),  # 175
-                (left, top*6))
-    screen.blit(base2.render('A и D', True, dark_grey),
-                (left + 175*.5 - 25, top*7))
-    screen.blit(base.render('движение влево и вправо', True, dark_grey),
-                (left + (175 - 205)*.5, top*8))
+                (left, top*5.5))
+    button = pygame.Rect(left + 175*.2 - 20, top*7.5-8, 40, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(left + 175*.2 - 18, top*7.5-6, 36, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
+    button = pygame.Rect(left + 175*.8 - 20, top*7.5-8, 40, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(left + 175*.8 - 18, top*7.5-6, 36, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
+    screen.blit(base2.render('A', True, dark_grey),  # 14
+                (left + 175*.2 - 7, top*7.5))
+    screen.blit(base2.render('D', True, dark_grey),  # 14
+                (left + 175*.8 - 7, top*7.5))
+    screen.blit(base.render('Движение влево и вправо', True, dark_grey),
+                (left + (175 - 205)*.5, top*9))
     # ПИ
     screen.blit(base2.render('Правый игрок (ПИ)', True, dark_grey),  # 188
-                (settings.WIDTH - left - 188, top*6))
-    screen.blit(base2.render('LEFT и RIGHT', True, dark_grey),  # 131
-                (settings.WIDTH - left - (131 + 188)*.5, top*7))
-    screen.blit(base.render('движение влево и вправо', True, dark_grey),  # 205
-                (settings.WIDTH - left - (205 + 188)*.5, top*8))
+                (settings.WIDTH - left - 188, top*5.5))
+    button = pygame.Rect(settings.WIDTH-left-188*.8-37, top*7.5-8, 74, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(settings.WIDTH-left-188*.8-35, top*7.5-6, 70, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
+    button = pygame.Rect(settings.WIDTH-left-188*.2-43, top*7.5-8, 86, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(settings.WIDTH-left-188*.2-41, top*7.5-6, 82, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
+    screen.blit(base2.render('LEFT', True, dark_grey),  # 48
+                (settings.WIDTH - left - 188*.8 - 24, top*7.5))
+    screen.blit(base2.render('RIGHT', True, dark_grey),  # 61
+                (settings.WIDTH - left - 188*.2 - 30, top*7.5))
+    screen.blit(base.render('Движение влево и вправо', True, dark_grey),  # 205
+                (settings.WIDTH - left - (205 + 188)*.5, top*9))
     #
     screen.blit(base2.render('Первый этап', True, dark_grey),  # 125
-                (left + (175 - 125)*.5, top*10))
+                (left + (175 - 125)*.5, top*11))
     screen.blit(base.render('Тренировка', True, dark_grey),  # 94
-                (left + (175 - 94)*.5, top*11))
+                (left + (175 - 94)*.5, top*12))
     #
     screen.blit(base2.render('Время', True, dark_grey),  # 63
-                (settings.WIDTH - left - (63 + 188)*.5, top*10))
+                (settings.WIDTH - left - (63 + 188)*.5, top*11))
     screen.blit(base.render('1 минута', True, dark_grey),  # 69
-                (settings.WIDTH - left - (69 + 188)*.5, top*11))
+                (settings.WIDTH - left - (69 + 188)*.5, top*12))
     #
+    button = pygame.Rect(center-263, top*14-10, 526, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(center-261, top*14-8, 522, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
     screen.blit(base.render('Чтобы начать, одновременно нажмите W и '
                             'стрелку вверх (UP)', True, dark_grey),
-                (center - 251, top*13))
+                (center - 251, top*14))
     screen.blit(base.render('Удерживайте красный шар на вершине '
-                            'горы как можно дольше.', True, dark_grey),
-                (center - 258, top*15))
+                            'горы как можно дольше', True, dark_grey),
+                (center - 258, top*15.5))
     #
     date = dt.now()
     if len(str(date.minute)) > 1:
@@ -137,6 +161,10 @@ def ui_pre_exam(screen):
     screen.blit(base.render('1 минута', True, dark_grey),  # 69
                 (settings.WIDTH - left - (69 + 188)*.5, top*13))
     #
+    button = pygame.Rect(center-263, top*17-10, 526, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(center-261, top*17-8, 522, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
     screen.blit(base.render('Чтобы начать, одновременно нажмите W и '
                             'стрелку вверх (UP)', True, dark_grey),
                 (center - 251, top*17))
@@ -199,6 +227,10 @@ def ui_result(screen):
     screen.blit(base2.render(f'{variables.health}', True, dark_grey),
                 (settings.WIDTH - left - 13, top*9))
     #
+    button = pygame.Rect(center-151, top*17-10, 302, 40)
+    pygame.draw.rect(screen, accent, button)
+    button = pygame.Rect(center-149, top*17-8, 298, 36)
+    pygame.draw.rect(screen, settings.bg_color, button)
     screen.blit(base.render('Чтобы завершить, нажмите ENTER', True, dark_grey),
                 (center - 276*.5, top*17))  # 276
     #
