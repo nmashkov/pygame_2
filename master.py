@@ -217,7 +217,6 @@ class App:
         pygame.time.set_timer(settings.PLAYER_POS, settings.PLPOSLOG_TIMER)
         # start wind
         variables.wind_direction = 0
-        variables.wind_direction_prev = 0
         pygame.time.set_timer(settings.WIND, settings.wind_timer)
 
     def game(self, player_body, minutes, seconds):

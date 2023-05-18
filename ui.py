@@ -183,6 +183,7 @@ def ui_pre_exam(screen):
     screen.blit(base2.render(f'{variables.health}', True, dark_grey),
                 (settings.WIDTH - left - 13, top*9))
     #
+    left = 70
     screen.blit(base2.render('Второй этап', True, dark_grey),  # 120
                 (left + (175 - 120)*.5, top*12))
     screen.blit(base.render('Зачёт', True, dark_grey),  # 45
