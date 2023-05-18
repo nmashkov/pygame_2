@@ -673,7 +673,7 @@ def event_handler():
                     else:
                         variables.debug_activated = False
                 if events.key == settings.EXIT:
-                    pygame.event.post(pygame.QUIT)
+                    pygame.event.post(pygame.event.Event(pygame.QUIT))
 
         if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
             player_events(events)

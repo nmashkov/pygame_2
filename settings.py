@@ -83,7 +83,7 @@ wt_zero = 1500
 
 # exam player and stats settings
 exam_health = 3
-exam_game_timer = 1
+exam_game_timer = 2
 
 # exam difficulty steps
 ex_wt_start = 1000

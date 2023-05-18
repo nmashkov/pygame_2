@@ -190,8 +190,8 @@ def ui_pre_exam(screen):
     #
     screen.blit(base2.render('Время', True, dark_grey),  # 63
                 (settings.WIDTH - left - (63 + 188)*.5, top*12))
-    screen.blit(base.render('1 минута', True, dark_grey),  # 69
-                (settings.WIDTH - left - (69 + 188)*.5, top*13))
+    t = base.render('2 минуты', True, dark_grey)
+    screen.blit(t, (settings.WIDTH - left - (t.get_width() + 188)*.5, top*13))
     #
     button = pygame.Rect(center-263, top*17-10, 526, 40)
     pygame.draw.rect(screen, accent, button)

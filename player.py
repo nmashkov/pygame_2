@@ -74,7 +74,11 @@ class Player:
     def update(self):
         # player check timer
         if variables.SESSION_STAGE in ('START_TRAIN', 'START_EXAM'):
-            if (variables.minutes >= settings.game_timer and
+            if variables.SESSION_STAGE == 'START_TRAIN':
+                end_timer = settings.game_timer
+            else:
+                end_timer = settings.exam_game_timer
+            if (variables.minutes >= end_timer and
                     variables.ticks_current > 100):
                 player_log.info(
                     {
