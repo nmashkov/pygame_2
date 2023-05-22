@@ -553,7 +553,6 @@ def event_handler():
             # PREPARE EXAM
             variables.health = settings.exam_health
             variables.wind_direction = 0
-            variables.wind_direction_prev = 0
             event_log.info(
                 {
                     'time': f'{dt.now()}',

@@ -12,8 +12,9 @@ def ui_credits(screen):
     left = 70
     center = settings.WIDTH // 2
     #
-    screen.blit(title1.render(settings.NAME, True, dark_grey),
-                (center - 66, top))
+    t = title1.render(settings.NAME, True, dark_grey)
+    screen.blit(t,
+                (center - t.get_width()*.5, top))
     screen.blit(base2.render('Идея', True, dark_grey),
                 (left, top*4))
     text = base2.render('Малишевский А.В.', True, dark_grey)
@@ -43,21 +44,18 @@ def ui_menu(screen):
     left = 70
     center = settings.WIDTH // 2
     #
-    screen.blit(title1.render(settings.NAME, True, dark_grey),
-                (center - 66, top))
+    t = title1.render(settings.NAME, True, dark_grey)
+    screen.blit(t,
+                (center - t.get_width()*.5, top))
     screen.blit(title2.render('Управление', True, dark_grey),
                 (center - 70, top*3.5))
     # ЛИ
     screen.blit(base2.render('Левый игрок (ЛИ)', True, dark_grey),  # 175
                 (left, top*5.5))
     button = pygame.Rect(left + 175*.2 - 20, top*7.5-8, 40, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(left + 175*.2 - 18, top*7.5-6, 36, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     button = pygame.Rect(left + 175*.8 - 20, top*7.5-8, 40, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(left + 175*.8 - 18, top*7.5-6, 36, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     screen.blit(base2.render('A', True, dark_grey),  # 14
                 (left + 175*.2 - 7, top*7.5))
     screen.blit(base2.render('D', True, dark_grey),  # 14
@@ -68,13 +66,9 @@ def ui_menu(screen):
     screen.blit(base2.render('Правый игрок (ПИ)', True, dark_grey),  # 188
                 (settings.WIDTH - left - 188, top*5.5))
     button = pygame.Rect(settings.WIDTH-left-188*.8-37, top*7.5-8, 74, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(settings.WIDTH-left-188*.8-35, top*7.5-6, 70, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     button = pygame.Rect(settings.WIDTH-left-188*.2-43, top*7.5-8, 86, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(settings.WIDTH-left-188*.2-41, top*7.5-6, 82, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     screen.blit(base2.render('LEFT', True, dark_grey),  # 48
                 (settings.WIDTH - left - 188*.8 - 24, top*7.5))
     screen.blit(base2.render('RIGHT', True, dark_grey),  # 61
@@ -93,9 +87,7 @@ def ui_menu(screen):
                 (settings.WIDTH - left - (69 + 188)*.5, top*12))
     #
     button = pygame.Rect(center-263, top*14-10, 526, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(center-261, top*14-8, 522, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     screen.blit(base.render('Чтобы начать, одновременно нажмите W и '
                             'стрелку вверх (UP)', True, dark_grey),
                 (center - 251, top*14))
@@ -117,7 +109,9 @@ def ui_menu(screen):
 
 def ui_game(screen, minutes, seconds):
     hud = pygame.Rect(21, 20, settings.WIDTH-20*2-1, 40)
-    pygame.draw.rect(screen, (255, 255, 255), hud)
+    pygame.draw.rect(screen, (255, 255, 255), hud,
+                     border_bottom_left_radius=10,
+                     border_bottom_right_radius=10)
     pan = settings.WIDTH // 4
     center = settings.WIDTH // 2
     # hud
@@ -195,9 +189,7 @@ def ui_pre_exam(screen):
     screen.blit(t, (settings.WIDTH - left - (t.get_width() + 188)*.5, top*13))
     #
     button = pygame.Rect(center-263, top*17-10, 526, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(center-261, top*17-8, 522, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     screen.blit(base.render('Чтобы начать, одновременно нажмите W и '
                             'стрелку вверх (UP)', True, dark_grey),
                 (center - 251, top*17))
@@ -261,9 +253,7 @@ def ui_result(screen):
                 (settings.WIDTH - left - 13, top*9))
     #
     button = pygame.Rect(center-151, top*17-10, 302, 40)
-    pygame.draw.rect(screen, accent, button)
-    button = pygame.Rect(center-149, top*17-8, 298, 36)
-    pygame.draw.rect(screen, settings.bg_color, button)
+    pygame.draw.rect(screen, accent, button, width=2, border_radius=10)
     screen.blit(base.render('Чтобы завершить, нажмите ENTER', True, dark_grey),
                 (center - 276*.5, top*17))  # 276
     #

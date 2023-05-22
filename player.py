@@ -109,7 +109,6 @@ class Player:
                     self.body.force = (0, 0)
                     self.body.angular_velocity = 0
                     variables.wind_direction = 0
-                    variables.wind_direction_prev = 0
                     variables.wind_timer = 3000
                     pygame.time.set_timer(settings.WIND, 0)
                     pygame.time.set_timer(settings.WIND, settings.wind_timer)

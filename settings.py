@@ -5,7 +5,7 @@ import pygame
 
 
 # main game settings
-NAME = 'Игра 2'
+NAME = 'Synergy-2'
 WIDTH, HEIGHT = 700, 900
 FPS = 60
 bg_color = (239, 239, 239)
