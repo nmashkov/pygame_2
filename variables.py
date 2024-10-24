@@ -8,6 +8,9 @@ SESSION_STAGE = ''
 # START_MENU, ABOUT, INPUT_DATA, GUIDE,
 # START_TRAIN, PRE_EXAM, START_EXAM, STOP_STAGE, RESULT
 
+SESSION_START = dt.now()
+SESSION_END = dt.now()
+
 ticks = pygame.time.get_ticks()
 health = settings.health
 

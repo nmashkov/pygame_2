@@ -71,8 +71,28 @@ def print_results(stage):
     results_file = 'results.txt'
     dir = (f'{settings.BASE_DIR}/{settings.BASE_LOGS_DIR}/'
            f'{settings.SESSION_DIR}/{results_file}')
-    with open(dir, 'a') as f:
+    with open(dir, 'a', encoding='utf-8') as f:
         f.write('\n'.join(results_dict))
+    #
+    if stage == 'RESULT':
+        results_str = (
+            f"\n{settings.SESSION_DIR[:8]};"
+            f"{variables.SESSION_START};"
+            f"{variables.SESSION_END};"
+            "ЛИ;"
+            "ПИ;"
+            f"{variables.health};"
+            f"{variables.stage_time};"
+            f"{player_p};"
+            f"{player_kp};"
+            f"{variables.cooperative_time};"
+            f"{variables.conflict_time};"
+        )                  
+        all_results_file = 'all_results.csv'
+        dir = (f'{settings.BASE_DIR}/{settings.BASE_LOGS_DIR}/'
+            f'{all_results_file}')
+        with open(dir, 'a', encoding='utf-8') as f:
+            f.write(results_str)
 
 
 def get_wind(wind_direction_prev):
@@ -461,7 +481,9 @@ def event_handler():
                     }
                 )
         # RESULT
+        variables
         if events.type == settings.RESULT:
+            variables.SESSION_END = dt.now()
             event_log.info(
                 {
                     'time': f'{dt.now()}',

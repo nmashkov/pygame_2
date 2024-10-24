@@ -4,6 +4,7 @@ docs.txt
 /logs
 /fonts
 /output
+/venv-new
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
