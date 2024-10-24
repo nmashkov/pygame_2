@@ -1,6 +1,6 @@
 """
 Synergy-2
-Author: Alexey Malishevsky
+Authors: Alexey Malishevsky, Nikita Mashkov
 Programmer: Nikita Mashkov
 Designer: Evgeny Manuylenko
 Github: https://github.com/nmashkov
